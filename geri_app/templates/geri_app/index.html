@@ -1,0 +1,46 @@
+{% extends 'geri_app/base.html' %}
+
+{% load static %}
+
+
+    {% block content %}
+
+<script>
+{% if message %}
+alert(' {{message}} ');
+{% endif %}
+</script>
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Hello, Curami!</h1>
+        <p>Help a loved one feel more at home in the hospital.</p>
+        <p><a class="btn btn-primary btn-lg" href="verify" role="button">Learn more &raquo;</a></p>
+      </div>
+    </div>
+
+    <div class="container">
+    <h3>Three Easy Steps!</h3>
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-4">
+          <h2>Get a code!</h2>
+          <p><a class="btn btn-default" href="verify" role="button">View details &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+          <h2>Make a video!</h2>
+       </div>
+        <div class="col-md-4">
+          <h2>Share you thoughts!</h2>
+        </div>
+      </div>
+
+      <hr>
+
+      <footer>
+        <p>&copy; 2016 Company, Inc.</p>
+      </footer>
+    </div> <!-- /container -->
+
+
+{% endblock %}

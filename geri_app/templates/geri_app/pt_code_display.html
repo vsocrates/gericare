@@ -1,0 +1,20 @@
+{% extends 'geri_app/base.html' %}
+
+{% load static %}
+
+{% block content %}
+  {% csrf_token %}
+
+<p>Is this information correct?</p>
+
+<p>Patient First Name: {{pt_name_first}}</p>
+<p>Patient Last Name: {{pt_name_last}}</p>
+<p>First Family Member Name: {{family_member_name}}</p>
+<p>Family Member Email: {{family_email}}</p>
+<p>Relation to Patient: {{family_relation}}</p>
+<p>Patient Room Number: {{pt_room}}</p>
+<p>Patient Hospital: {{pt_hospital}}</p>
+
+<p>An email with the following link has been sent {{family_member_name}} at {{family_email}}</p>
+<a href="http://127.0.0.1:8000/verify/?code={{benefactor.verification_code}}">http://127.0.0.1:8000/verify/?code={{benefactor.verification_code}}</a>
+{% endblock %}

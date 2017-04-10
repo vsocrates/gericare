@@ -1,0 +1,16 @@
+{% extends 'geri_app/base.html' %}
+
+{% load static %}
+
+{% block content %}
+  {% csrf_token %}
+  
+<h1>Upload patient information!</h1>
+
+<form action="{% url "patient_upload" %}"  method="get">
+  
+    {{ form }}
+    <input type="submit" value="Submit" />
+</form>
+
+{% endblock %}
