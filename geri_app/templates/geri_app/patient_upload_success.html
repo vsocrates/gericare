@@ -1,0 +1,13 @@
+{% extends 'geri_app/base.html' %}
+
+{% load static %}
+
+{% block content %}
+  {% csrf_token %}
+
+<h1>The patient was uploaded successfully!</h1>
+
+<p>An email with the following link has been sent to {{name}} at {{email}}</p>
+<a href="http://127.0.0.1:8000/verify/?code={{benefactor.verification_code}}">http://127.0.0.1:8000/verify/?code={{benefactor.verification_code}}</a>
+
+{% endblock %}

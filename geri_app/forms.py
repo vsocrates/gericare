@@ -12,7 +12,7 @@ class VolunteerUploadForm(forms.Form):
 	pt_name_first = forms.CharField(label="Patient First Name: ")
 	pt_name_last = forms.CharField(label="Patient Last Name: ")
 	family_member_name = forms.CharField(label= "First Family Member name: ")
-	family_email = forms.EmailField(help_text='A valid email address, please.')
+	family_email = forms.EmailField()
 	
 	CHOICES = (('mother','mother'), ('father','father'), ('brother', 'brother') ,('sister', 'sister'),('friend', 'friend'))
 	family_relation = forms.ChoiceField(choices=CHOICES)

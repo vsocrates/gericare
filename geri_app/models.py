@@ -8,7 +8,9 @@ class Benefactor(models.Model):
 	first_name = models.CharField(max_length=30)
 	last_name = models.CharField(max_length=30)
 	room_number = models.IntegerField()
-	
+	isCurrentPatient = models.BooleanField(default=True)
+	patientCheckedOutDate = models.DateField(blank=True, null=True)
+
 	HOSPITAL_CHOICES = (
 		('UH', 'Unvirsity Hospitals'),
 		('CC','Cleveland Clinic')

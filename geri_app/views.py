@@ -14,6 +14,7 @@ from geri_app.models import Benefactor
 from geri_app.forms import MediaDocumentForm
 from geri_app.forms import BenefactorVerificationForm
 from geri_app.forms import VolunteerUploadForm
+from django.contrib.auth.decorators import login_required
 import re
 
 import uuid
@@ -25,6 +26,7 @@ def index(request):
 	context = {}
 	return HttpResponse(template.render(context, request))
 
+@login_required
 def verify_benefactor(request):
 
     print request.build_absolute_uri(request.get_full_path())
@@ -65,7 +67,7 @@ def verify_benefactor(request):
         #     form2 = BenefactorVerificationForm()
 
     
-
+@login_required
 def simple_upload(request):
     # Handle file upload
     if request.method == 'POST':
@@ -87,6 +89,7 @@ def simple_upload(request):
         {'form': form}
     )
 
+@login_required
 def view_videos(request):
     # Load documents for the list page
     documents = MediaDocument.objects.all()
@@ -97,6 +100,7 @@ def view_videos(request):
         {"documents": documents}
     )
 
+@login_required
 def pt_upload(request):
     if request.method == "GET":
         template = loader.get_template('geri_app/pt_upload.html')
@@ -143,4 +147,33 @@ def pt_upload(request):
         request, 
         'geri_app/pt_upload.html',
         {'form': form}
+    )
+
+@login_required
+def pt_upload_success(request):
+    context = {
+        "email":request.GET['email'],
+        'name':request.GET['name'],
+    }
+
+    return render(
+        request, 
+        'geri_app/patient_upload_success.html',
+        context,
+    )
+
+@login_required
+def volunteer_landing(request):
+    q = Benefactor.objects.filter(
+            isCurrentPatient=False
+        )
+    context = {}
+    if q:
+        context['active_patients'] = q
+        template = loader.get_template('geri_app/volunteer_landing.html')
+
+    return render(
+        request, 
+        'geri_app/volunteer_landing.html',
+        context
     )

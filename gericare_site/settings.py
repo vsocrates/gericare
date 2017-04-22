@@ -28,20 +28,22 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
-LOGIN_REDIRECT_URL = "view"
+LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'geri_app',
+    'formtools',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'geri_app'
+    
 ]
 
 MIDDLEWARE = [
@@ -59,7 +61,8 @@ ROOT_URLCONF = 'gericare_site.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),
+                "C:/Users/Vimig/Envs/gericare/Lib/site-packages/formtools/templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
