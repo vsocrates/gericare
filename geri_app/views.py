@@ -217,7 +217,8 @@ def volunteer_landing(request):
 
 def pt_search(request):
 
-    pname = request.GET['']
+    fname = request.GET['pt_fname']
+    lname = request.GET['pt_lname']
     q = Benefactor.objects.filter()
     context = {}
     return render(

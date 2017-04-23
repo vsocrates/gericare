@@ -25,7 +25,7 @@ SECRET_KEY = 'y=hrx@lj2(te&$bd+sb=q(89cq#@7$wf&i^1q=u#8av@37v9hx'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [u'127.0.0.1', u'ec2-54-152-23-178.compute-1.amazonaws.com']
+ALLOWED_HOSTS = [u'127.0.0.1', u'ec2-54-152-23-178.compute-1.amazonaws.com', u'localhost']
 
 
 LOGIN_REDIRECT_URL = '/'
@@ -132,7 +132,3 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
-
-STATICFILES_DIRS = (
-    os.path.normpath(os.path.join(BASE_DIR, "static")),
-)
