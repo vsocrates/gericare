@@ -17,7 +17,10 @@ from geri_app.forms import VolunteerUploadForm
 from django.contrib.auth.decorators import login_required
 import re
 
-import uuid
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 # Create your views here.
 
 def index(request):
@@ -100,61 +103,95 @@ def view_videos(request):
         {"documents": documents}
     )
 
-@login_required
-def pt_upload(request):
-    if request.method == "GET":
-        template = loader.get_template('geri_app/pt_upload.html')
-        template2 = loader.get_template('geri_app/pt_code_display.html')
+# @login_required
+# def pt_upload(request):
+#     if request.method == "GET":
+#         template = loader.get_template('geri_app/pt_upload.html')
+#         template2 = loader.get_template('geri_app/pt_code_display.html')
 
-        form = VolunteerUploadForm(request.GET)
-        context = {}
-        if form.is_valid():
-            pt_first = request.GET['pt_name_first'] 
-            pt_last = request.GET['pt_name_last'] 
-            family_name = request.GET['family_member_name'] 
-            family_email = request.GET['family_email']
-            relation = request.GET['family_relation']
-            pt_room = request.GET['pt_room']
-            pt_hospital = request.GET['pt_hospital']
-            context = {'pt_name_first':pt_first,
-                       'pt_name_last': pt_last,
-                       'family_member_name':family_name,
-                       'family_email': family_email,
-                       'family_relation':relation,
-                       'pt_room':pt_room,
-                       'pt_hospital': pt_hospital,
-                      }
-            
-            q1 = False
-            
-            if not q1:
-                new_uuid = uuid.uuid4()
-                new_pt = Benefactor(
-                    first_name=pt_first,
-                    last_name=pt_last,
-                    room_number=pt_room,
-                    hospital_name=pt_hospital,
-                    verification_code=new_uuid
-                    )
-                new_pt.save()
-                context['benefactor'] = new_pt
+#         form = VolunteerUploadForm(request.GET)
+#         context = {}
+#         if form.is_valid():
+#             pt_first = request.GET['pt_name_first'] 
+#             pt_last = request.GET['pt_name_last'] 
+#             family_name = request.GET['family_member_name'] 
+#             family_email = request.GET['family_email']
+#             relation = request.GET['family_relation']
+#             pt_room = request.GET['pt_room']
+#             pt_hospital = request.GET['pt_hospital']
+#             context = {'pt_name_first':pt_first,
+#                        'pt_name_last': pt_last,
+#                        'family_member_name':family_name,
+#                        'family_email': family_email,
+#                        'family_relation':relation,
+#                        'pt_room':pt_room,
+#                        'pt_hospital': pt_hospital,
+#                       }
+                        
+#             if not q1:
+#                 new_uuid = uuid.uuid4()
+#                 new_pt = Benefactor(
+#                     first_name=pt_first,
+#                     last_name=pt_last,
+#                     room_number=pt_room,
+#                     hospital_name=pt_hospital,
+#                     verification_code=new_uuid
+#                     )
+#                 new_pt.save()
+#                 context['benefactor'] = new_pt
 
-            return HttpResponse(template2.render(context, request))
-        else:
-            form = VolunteerUploadForm()     
+#             return HttpResponse(template2.render(context, request))
+#         else:
+#             form = VolunteerUploadForm()     
 
-    return render(
-        request, 
-        'geri_app/pt_upload.html',
-        {'form': form}
-    )
+#     return render(
+#         request, 
+#         'geri_app/pt_upload.html',
+#         {'form': form}
+#     )
 
 @login_required
 def pt_upload_success(request):
+    email = request.GET['email']
+    name = request.GET['name']
+    code = request.GET['code']
+    fname = request.GET['pt_first']
+    lname = request.GET['pt_last']
+
     context = {
-        "email":request.GET['email'],
-        'name':request.GET['name'],
+        "email":email,
+        'name':name,
+        'code':code,
+        'fname':fname,
+        'lname':lname
     }
+
+    full_name = fname + " " + lname
+    upload_link = "http://" + request.get_host() +"/verify/?code=" + str(code)
+
+    email_body_text = "Dear" + name + ",\nWelcome to Curami! Thank you for taking the first step toward your Curami experience. Using Curami, you can send personalized video messages to your loved ones in the hospital at any time of the day from anywhere in the world. \nClick on this link to share your love with "+ full_name +" by sending them a video. \n Know any other family or friends who would like to share their love and send a message to " + full_name +"? Send them this link to upload a video: "+ upload_link + ". \nIf you have any questions, please reach out to the Curami Team at TeamCurami@gmail.com. \nBest wishes,\n The Curami Team"
+
+    email_link_href = r'<a href="' + upload_link + '">' + upload_link + "</a>"
+    print 'upload_link' , upload_link
+    print email_link_href
+    email_body_html = """
+        <html>
+          <head></head>
+          <body>
+               Dear """ + name + """,<br /><br />
+               Welcome to Curami! Thank you for taking the first step toward your Curami experience. Using Curami, you can send personalized video messages to your loved ones in the hospital at any time of the day from anywhere in the world.<br /><br />
+               Click on this link to share your love with """ + full_name + """ by sending them a video.<br /><br />
+               Know any other family or friends who would like to share their love and send a message to """+full_name+"""? Send them this link to upload a video: """ + email_link_href+"""</a>.<br /><br />
+               If you have any questions, please reach out to the Curami Team at TeamCurami@gmail.com.<br /><br />
+               Best wishes,<br />
+               The Curami Team
+            </p>
+          </body>
+        </html>
+        """
+
+    send_email('teamcurami@gmail.com', "Team Curami",'Curami123', email, 'Here we go!', email_body_text, email_body_html)
+
 
     return render(
         request, 
@@ -177,3 +214,54 @@ def volunteer_landing(request):
         'geri_app/volunteer_landing.html',
         context
     )
+
+def pt_search(request):
+
+    pname = request.GET['']
+    q = Benefactor.objects.filter()
+    context = {}
+    return render(
+        request, 
+        'geri_app/pt_search.html',
+        context
+    )
+
+def send_email(user, team_name, pwd, recipient, subject, text_body, html_body):
+    import smtplib
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText
+    
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = subject
+    msg['From'] = team_name + "<"+user+">"
+
+    part1 = MIMEText(text_body, 'plain')
+    part2 = MIMEText(html_body, 'html')
+
+    msg.attach(part1)
+    msg.attach(part2)
+
+    FROM = team_name + "<"+user+">"
+    TO = recipient if type(recipient) is list else [recipient]
+    msg['To'] = ", ".join(TO)
+
+    gmail_user = user
+    gmail_pwd = pwd
+    
+    # TO = recipient if type(recipient) is list else [recipient]
+    # SUBJECT = subject
+    # TEXT = body
+
+    # Prepare actual message
+    #message = """From: %s\nTo: %s\nSubject: %s\n\n%s """ % (FROM, ", ".join(TO), SUBJECT, TEXT)
+    try:
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.ehlo()
+        server.starttls()
+        server.login(gmail_user, gmail_pwd)
+        server.sendmail(FROM, TO, msg.as_string())
+        server.quit()
+        print 'successfully sent the mail'
+    except Exception as inst:
+        print inst
+        print "failed to send mail"

@@ -5,8 +5,6 @@
 
 {% if form.errors %}<h1>{% trans "Please correct the following errors" %}</h1>{% else %}<h1>{% trans "Submit" %}</h1>{% endif %}
 
-<p>adfasdfasdfasd</p>
-
 <form action="" method="post">{% csrf_token %}
 <table>
 {{ form }}

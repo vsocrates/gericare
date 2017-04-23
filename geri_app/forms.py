@@ -24,3 +24,15 @@ class VolunteerUploadForm(forms.Form):
 		('CC','Cleveland Clinic')
 	)
 	pt_hospital = forms.ChoiceField(choices=HOSPITAL_CHOICES)
+
+class PatientSearchForm(forms.Form):
+	pt_fname = forms.CharField(label="Patient First Name: ")
+	pt_lname = forms.CharField(label="Patient Last Name: ")
+	pt_room = forms.IntegerField()
+	
+	HOSPITAL_CHOICES = (
+		('UH', 'Unvirsity Hospitals'),
+		('CC','Cleveland Clinic')
+	)
+	
+	pt_hospital = forms.ChoiceField(choices=HOSPITAL_CHOICES)
