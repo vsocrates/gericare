@@ -46,6 +46,13 @@ class VolunteerUploadFormPreview(FormPreview):
         	+"&pt_first="+pt.first_name
         	+"&pt_last="+pt.last_name)
 
+class PatientSearchFormPreview(FormPreview):
+    def done(self, request, cleaned_data):
+            
+            # Do something with the cleaned_data, then redirect
+            # to a "success" page.
 
-
-
+            return HttpResponseRedirect('/pt_find?pt_fname='+cleaned_data['pt_fname']
+            +"&pt_lname="+cleaned_data['pt_lname']
+            +"&pt_room="+str(cleaned_data['pt_room'])
+            +"&pt_hospital="+cleaned_data['pt_hospital'])

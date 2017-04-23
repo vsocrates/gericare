@@ -215,17 +215,38 @@ def volunteer_landing(request):
         context
     )
 
-def pt_search(request):
+def pt_find(request):
 
     fname = request.GET['pt_fname']
     lname = request.GET['pt_lname']
-    q = Benefactor.objects.filter()
+    pt_room = request.GET['pt_room']
+    pt_hospital = request.GET['pt_hospital']
+
     context = {}
-    return render(
-        request, 
-        'geri_app/pt_search.html',
-        context
-    )
+    q = Benefactor.objects.filter(
+            first_name=fname,
+            last_name=lname,
+            room_number=pt_room,
+            hospital_name=pt_hospital, 
+        )
+
+    if q:
+        found_patient = q[0]
+        context['fname'] = found_patient.first_name
+        context['lname'] = found_patient.last_name
+        context['room'] = found_patient.room_number
+        context['hospital'] = found_patient.hospital_name
+
+        return HttpResponseRedirect('/verify/?code='+str(found_patient.verification_code))
+
+    #     return render(
+    #     request, 
+    #     'geri_app/pt_find.html',
+    #     context
+    # )
+    else:
+        return HttpResponseRedirect('/patient_search')
+
 
 def send_email(user, team_name, pwd, recipient, subject, text_body, html_body):
     import smtplib

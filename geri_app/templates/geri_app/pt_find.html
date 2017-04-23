@@ -1,0 +1,15 @@
+{% extends 'geri_app/base.html' %}
+
+{% load static %}
+
+{% block content %}
+  {% csrf_token %}
+ 
+<h1>Patient Search</h1>
+
+<h2>Is this your loved one?</h2>
+
+
+<h4>{{fname}} {{lname}} at Room {{room}} in {{hospital}}</h4>
+
+{% endblock %}
