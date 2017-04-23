@@ -18,7 +18,7 @@
                 {{ form.docfile.errors }}
                 {{ form.docfile }}
             </p>
-
+            <input type="hidden" value="{{benefactor.verification_code}}"/>
             <p><input type="submit" value="Upload"/></p>
         </form>
 {% endblock %}

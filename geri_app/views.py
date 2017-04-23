@@ -74,13 +74,18 @@ def verify_benefactor(request):
 def simple_upload(request):
     # Handle file upload
     if request.method == 'POST':
+        print request.POST
         form = MediaDocumentForm(request.POST, request.FILES)
         if form.is_valid():
-            newdoc = MediaDocument(docfile=request.FILES['docfile'])
+        #     q1 = Benefactor.objects.objects.filter(
+        #         verification_code=request.POST['code']
+        # )
+            #current_pt = q1[0]
+            newdoc = MediaDocument(docfile=request.FILES['docfile'])#,benefactor_id=current_pt)
             newdoc.save()
 
             # Redirect to the document list after POST
-            return HttpResponseRedirect(reverse('upload'))
+            return HttpResponseRedirect('/view')
     else:
         form = MediaDocumentForm()  # A empty, unbound form
 
