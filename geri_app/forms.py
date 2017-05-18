@@ -1,9 +1,13 @@
 from django import forms
 
+from django.conf import settings
+from validators import MimetypeValidator
+
 class MediaDocumentForm(forms.Form):
-    docfile = forms.FileField(
-        label='Upload a Video!'
-    )
+	docfile = forms.FileField(help_text="Upload a video",
+							   validators=[MimetypeValidator(settings.MEDIA_MIME_TYPES)],
+							   label='Upload a Video!',
+							   allow_empty_file=False)
 
 class BenefactorVerificationForm(forms.Form):
 	verification = forms.CharField(label="To whom")

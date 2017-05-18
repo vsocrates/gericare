@@ -19,5 +19,5 @@ class Benefactor(models.Model):
 	
 class MediaDocument(models.Model):
 	docfile = models.FileField(upload_to="documents/%Y/%m/%d")
-	#benefactor_id = models.ForeignKey('Benefactor',on_delete=models.CASCADE)
+	benefactor_id = models.ForeignKey('Benefactor',on_delete=models.CASCADE)
 

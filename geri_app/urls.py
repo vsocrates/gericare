@@ -1,14 +1,17 @@
 from django.conf.urls import url
-from forms import VolunteerUploadForm
+
 from forms import PatientSearchForm
-from preview import VolunteerUploadFormPreview
 from preview import PatientSearchFormPreview
+from forms import VolunteerUploadForm
+from preview import VolunteerUploadFormPreview
+
 from django import forms
 
 from . import views
 
 urlpatterns = [
-	url(r'^pt_upload/', VolunteerUploadFormPreview(VolunteerUploadForm), name = "patient_upload"),
+	url(r'^pt_upload/', views.pt_upload, name = "patient_upload"),
+	url(r'^pt_upload2/', VolunteerUploadFormPreview(VolunteerUploadForm), name = "patient_upload2"),
 	url(r'^patient_search/', PatientSearchFormPreview(PatientSearchForm), name = "pt_search"),
 	url(r'^pt_find/', views.pt_find, name='pt_find'),
 	url(r'^pt_upload_success/', views.pt_upload_success, name = "patient_upload_success"),

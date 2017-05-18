@@ -14,7 +14,6 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-print BASE_DIR
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -131,3 +130,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+
+#all the types of uploads allowed (in order): .mov, .flv, .mp4, .wmv, .avi 
+MEDIA_MIME_TYPES = ["video/quicktime", "video/x-flv", "video/mp4", "video/x-ms-wmv", "video/x-msvideo"]

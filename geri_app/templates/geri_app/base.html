@@ -42,6 +42,7 @@
         <li><a href="{% url 'index' %}">Home</a></li>
         <li><a href="{% url 'login' %}">Admin Login</a></li>
         <li><a href="{% url 'patient_upload' %}">Patient Upload</a></li>
+        <li><a href="{% url 'pt_search' %}">Patient Search</a></li>
       </ul>
     {% if user.is_authenticated %}
       <ul class="nav navbar-nav navbar-right">

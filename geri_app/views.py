@@ -21,6 +21,10 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+from forms import VolunteerUploadForm
+from preview import VolunteerUploadFormPreview
+
+
 # Create your views here.
 
 def index(request):
@@ -29,7 +33,6 @@ def index(request):
 	context = {}
 	return HttpResponse(template.render(context, request))
 
-@login_required
 def verify_benefactor(request):
 
     print request.build_absolute_uri(request.get_full_path())
@@ -51,7 +54,7 @@ def verify_benefactor(request):
             return render(
                 request, 
                 'geri_app/index.html',
-                {message:'Sorry, that is not a valid code!'}
+                {'message':'Sorry, that is not a valid code!'}
             )
         # form2 = BenefactorVerificationForm(request.GET)
         # context = {}
@@ -108,8 +111,11 @@ def view_videos(request):
         {"documents": documents}
     )
 
-# @login_required
-# def pt_upload(request):
+@login_required
+def pt_upload(request):
+    print "did the volunteer upload preview"
+    return HttpResponseRedirect('/pt_upload2')
+
 #     if request.method == "GET":
 #         template = loader.get_template('geri_app/pt_upload.html')
 #         template2 = loader.get_template('geri_app/pt_code_display.html')
@@ -155,6 +161,7 @@ def view_videos(request):
 #         {'form': form}
 #     )
 
+#TODO Make the email upload async so it's faster? 
 @login_required
 def pt_upload_success(request):
     email = request.GET['email']
