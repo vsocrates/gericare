@@ -14,7 +14,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+print BASE_DIR
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -36,7 +36,7 @@ LOGOUT_REDIRECT_URL = '/'
 
 INSTALLED_APPS = [
     'geri_app',
-    'formtools',
+ #   'formtools',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -61,8 +61,7 @@ ROOT_URLCONF = 'gericare_site.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'),
-                "C:/Users/Vimig/Envs/gericare/Lib/site-packages/formtools/templates"],
+        'DIRS': [os.path.join(BASE_DIR, 'geri_app/templates/geri_app/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
