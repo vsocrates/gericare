@@ -102,3 +102,6 @@ ENV/
 
 # Mac Stuff
 .DS_STORE
+
+#ignore the sqlite3 databse
+.sqlite3
