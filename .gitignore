@@ -141,3 +141,6 @@ ENV/
 ehthumbs.db
 Thumbs.db
 
+# App specific #
+######################
+media/
