@@ -47,7 +47,7 @@
     {% if user.is_authenticated %}
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#">Welcome {{ request.user }}!</a></li>
-        <button class="btn navbar-btn" href="{% url 'logout' %}">Logout</button>
+        <li><button type="button" class="btn btn-default navbar-btn" onclick="window.location.href='{% url 'logout' %}'" role="button">Logout</button></li>
       </ul>
     {% else %}
     {% endif %}
