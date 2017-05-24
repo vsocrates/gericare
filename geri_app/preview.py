@@ -3,6 +3,8 @@ from django.http import HttpResponseRedirect
 from models import Benefactor
 import uuid
 
+from django.contrib.auth.models import User, Group
+
 class VolunteerUploadFormPreview(FormPreview):
 
     def done(self, request, cleaned_data):
@@ -27,16 +29,26 @@ class VolunteerUploadFormPreview(FormPreview):
         #TODO something i forgot, it has to do with the query below....
         
         if not q1:
-	        new_uuid = uuid.uuid4()
-	        new_pt = Benefactor(
+	        #create a new user with the corresponding login information
+            user = User.objects.create_user(pt_first+pt_last+str(pt_room), '', str(pt_hospital)+'geriatrics')
+            user.first_name = pt_first
+            user.last_name = pt_last
+            new_group, created = Group.objects.get_or_create(name='benefactor')
+            user.groups.add(new_group)
+            user.save()
+
+            new_uuid = uuid.uuid4()
+            new_pt = Benefactor(
 	            first_name=pt_first,
 	            last_name=pt_last,
 	            room_number=pt_room,
 	            hospital_name=pt_hospital,
-	            verification_code=str(new_uuid)
+	            verification_code=str(new_uuid),
+                user=user
 	            )
-	        new_pt.save()
-	        pt = new_pt
+            new_pt.save()
+            pt = new_pt
+
         else:
         	pt = q1[0]
 

@@ -24,6 +24,7 @@ from email.mime.text import MIMEText
 from forms import VolunteerUploadForm
 from preview import VolunteerUploadFormPreview
 
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 
@@ -34,10 +35,9 @@ def index(request):
 	return HttpResponse(template.render(context, request))
 
 def verify_benefactor(request):
-
-    print request.build_absolute_uri(request.get_full_path())
     req_path = re.search('/verify/', request.build_absolute_uri(request.get_full_path()))
-    
+    form = MediaDocumentForm(request.POST, request.FILES)
+
     if request.method == "GET" and req_path:
         template = loader.get_template('geri_app/upload.html')
         pt_code = request.GET['code']
@@ -46,8 +46,9 @@ def verify_benefactor(request):
         )
         context = {}
         if q:
-            context['benefactor'] = q
+            context['benefactor'] = q[0]
             context['message'] = ''
+            context['form'] = form
             return HttpResponse(template.render(context, request))
         else:
 
@@ -76,15 +77,19 @@ def verify_benefactor(request):
 @login_required
 def simple_upload(request):
     # Handle file upload
+    print "GET", request.POST.get('code',"")
     if request.method == 'POST':
-        print request.POST
         form = MediaDocumentForm(request.POST, request.FILES)
         if form.is_valid():
-        #     q1 = Benefactor.objects.objects.filter(
-        #         verification_code=request.POST['code']
-        # )
-            #current_pt = q1[0]
-            newdoc = MediaDocument(docfile=request.FILES['docfile'])#,benefactor_id=current_pt)
+
+            try:
+                code = request.POST['code']
+                print 'code',code
+                cur_benefactor = Benefactor.objects.get(verification_code=code)
+            except ObjectDoesNotExist:
+                print("That user doesn't exist.")
+            
+            newdoc = MediaDocument(docfile=request.FILES['docfile'], benefactor=cur_benefactor)
             newdoc.save()
 
             # Redirect to the document list after POST
@@ -94,6 +99,7 @@ def simple_upload(request):
 
 
     # Render list page with the documents and the form
+    return HttpResponseRedirect('/upload/?code='+str(request.POST.get('code',"")))
     return render(
         request,
         'geri_app/upload.html',
@@ -103,7 +109,16 @@ def simple_upload(request):
 @login_required
 def view_videos(request):
     # Load documents for the list page
-    documents = MediaDocument.objects.all()
+    current_user = request.user
+    print 'current user ', current_user
+    documents = []
+    try:
+        cur_benefactor = Benefactor.objects.get(user = current_user)
+        documents = MediaDocument.objects.filter(
+        benefactor_id=cur_benefactor
+        )
+    except ObjectDoesNotExist:
+        print("That user doesn't exist.")
 
     return render(
         request,

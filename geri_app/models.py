@@ -1,6 +1,9 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.conf import settings
+from django.utils.timezone import now
+
 import uuid 
 
 class Benefactor(models.Model):
@@ -10,6 +13,7 @@ class Benefactor(models.Model):
 	room_number = models.IntegerField()
 	isCurrentPatient = models.BooleanField(default=True)
 	patientCheckedOutDate = models.DateField(blank=True, null=True)
+	user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
 
 	HOSPITAL_CHOICES = (
 		('UH', 'Unvirsity Hospitals'),
@@ -19,5 +23,6 @@ class Benefactor(models.Model):
 	
 class MediaDocument(models.Model):
 	docfile = models.FileField(upload_to="documents/%Y/%m/%d")
-	benefactor_id = models.ForeignKey('Benefactor',on_delete=models.CASCADE)
+	benefactor = models.ForeignKey('Benefactor',on_delete=models.CASCADE, null=True)
+	uploaded_at = models.DateTimeField(default=now, editable=False)
 

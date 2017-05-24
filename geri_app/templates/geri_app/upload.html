@@ -6,7 +6,7 @@
 
 <p>Step 1. Take a video of yourself!</p>
 <p>Step 2. Upload the video below!</p>
-
+<p>{{benefactor.verification_code}}</p>
         <!-- Upload form. Note enctype attribute! -->
         <form action="{% url "upload" %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -18,7 +18,9 @@
                 {{ form.docfile.errors }}
                 {{ form.docfile }}
             </p>
-            <input type="hidden" value="{{benefactor.verification_code}}"/>
+
+            <input type="hidden" name="code" value="{{benefactor.verification_code}}">
             <p><input type="submit" value="Upload"/></p>
+
         </form>
 {% endblock %}

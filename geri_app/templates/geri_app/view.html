@@ -5,6 +5,8 @@
 
     {% block content %}
 
+  {% csrf_token %}
+
             <!-- List of uploaded documents -->
         {% if documents %}
             <ul>
