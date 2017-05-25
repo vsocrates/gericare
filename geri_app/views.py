@@ -14,7 +14,6 @@ from geri_app.models import Benefactor
 from geri_app.forms import MediaDocumentForm
 from geri_app.forms import BenefactorVerificationForm
 from geri_app.forms import VolunteerUploadForm
-from django.contrib.auth.decorators import login_required
 import re
 
 import smtplib
@@ -23,8 +22,10 @@ from email.mime.text import MIMEText
 
 from forms import VolunteerUploadForm
 from preview import VolunteerUploadFormPreview
+from decorators import group_required
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.datastructures import MultiValueDictKeyError
 
 # Create your views here.
 
@@ -74,39 +75,40 @@ def verify_benefactor(request):
         #     form2 = BenefactorVerificationForm()
 
     
-@login_required
 def simple_upload(request):
     # Handle file upload
-    print "GET", request.POST.get('code',"")
+
+    try:
+        code = request.POST['code']
+        #print 'code',code
+        cur_benefactor = Benefactor.objects.get(verification_code=code)
+    except ObjectDoesNotExist:
+        print("That user doesn't exist.")
+
+    #print "GET", request.POST
     if request.method == 'POST':
         form = MediaDocumentForm(request.POST, request.FILES)
         if form.is_valid():
 
-            try:
-                code = request.POST['code']
-                print 'code',code
-                cur_benefactor = Benefactor.objects.get(verification_code=code)
-            except ObjectDoesNotExist:
-                print("That user doesn't exist.")
-            
             newdoc = MediaDocument(docfile=request.FILES['docfile'], benefactor=cur_benefactor)
             newdoc.save()
 
+            #print "new document saved!"
             # Redirect to the document list after POST
-            return HttpResponseRedirect('/view')
+            return HttpResponseRedirect('/')
     else:
         form = MediaDocumentForm()  # A empty, unbound form
 
-
-    # Render list page with the documents and the form
-    return HttpResponseRedirect('/upload/?code='+str(request.POST.get('code',"")))
     return render(
         request,
         'geri_app/upload.html',
-        {'form': form}
+        {'form': form,
+         'benefactor':cur_benefactor,
+         'message':''
+        }
     )
 
-@login_required
+@group_required('benefactor')
 def view_videos(request):
     # Load documents for the list page
     current_user = request.user
@@ -126,7 +128,7 @@ def view_videos(request):
         {"documents": documents}
     )
 
-@login_required
+@group_required('volunteer')
 def pt_upload(request):
     print "did the volunteer upload preview"
     return HttpResponseRedirect('/pt_upload2')
@@ -177,7 +179,7 @@ def pt_upload(request):
 #     )
 
 #TODO Make the email upload async so it's faster? 
-@login_required
+@group_required('volunteer')
 def pt_upload_success(request):
     email = request.GET['email']
     name = request.GET['name']
@@ -226,7 +228,7 @@ def pt_upload_success(request):
         context,
     )
 
-@login_required
+@group_required('volunteer')
 def volunteer_landing(request):
     q = Benefactor.objects.filter(
             isCurrentPatient=False
@@ -244,10 +246,13 @@ def volunteer_landing(request):
 
 def pt_find(request):
 
-    fname = request.GET['pt_fname']
-    lname = request.GET['pt_lname']
-    pt_room = request.GET['pt_room']
-    pt_hospital = request.GET['pt_hospital']
+    try:
+        fname = request.GET['pt_fname']
+        lname = request.GET['pt_lname']
+        pt_room = request.GET['pt_room']
+        pt_hospital = request.GET['pt_hospital']
+    except MultiValueDictKeyError:
+        return HttpResponseRedirect('/patient_search')
 
     context = {}
     q = Benefactor.objects.filter(

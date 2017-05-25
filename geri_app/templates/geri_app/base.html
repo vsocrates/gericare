@@ -1,4 +1,6 @@
 {% load static %}
+{% load auth_extras %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -37,21 +39,38 @@
       </button>
       <a class="navbar-brand" href="{% url 'index' %}">Curami Logo</a>
     </div>
+
+    
+
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
         <li><a href="{% url 'index' %}">Home</a></li>
+    {% if request.user|has_group:"volunteer" %}
         <li><a href="{% url 'login' %}">Admin Login</a></li>
         <li><a href="{% url 'patient_upload' %}">Patient Upload</a></li>
         <li><a href="{% url 'pt_search' %}">Patient Search</a></li>
+      
+    {% elif request.user|has_group:"benefactor"%}
+        <li><a href="{% url 'view' %}">View My Videos</a></li>  
+
+    {% else %}
+        <li><a href="{% url 'pt_search' %}">Patient Search</a></li>
+    {% endif %}
       </ul>
+
     {% if user.is_authenticated %}
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#">Welcome {{ request.user }}!</a></li>
         <li><button type="button" class="btn btn-default navbar-btn" onclick="window.location.href='{% url 'logout' %}'" role="button">Logout</button></li>
       </ul>
     {% else %}
+     <ul class="nav navbar-nav navbar-right">
+        <li><button type="button" class="btn btn-default navbar-btn" onclick="window.location.href='{% url 'login' %}'" role="button">Login</button></li>
     {% endif %}
     </div>
+
+    
+
   </div>
 </nav>
 
