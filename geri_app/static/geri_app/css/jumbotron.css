@@ -3,3 +3,29 @@ body {
   padding-top: 50px;
   padding-bottom: 20px;
 }
+
+.intro {
+  background: repeating-linear-gradient(
+    -55deg,
+    #62D5D9,
+    #62D5D9 5px,
+    #67DEE3 5px,
+    #67DEE3 10px
+  );
+  height: 70vh;
+  width:100%;
+}
+
+.logo {
+  background-image: url('../assets/logo.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height:70%;
+  width:100%;
+}
+
+.intro > .subText{
+  color: #FCFCFC;
+  text-align: center;
+}
