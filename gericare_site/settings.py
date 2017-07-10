@@ -24,7 +24,7 @@ SECRET_KEY = 'y=hrx@lj2(te&$bd+sb=q(89cq#@7$wf&i^1q=u#8av@37v9hx'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [u'127.0.0.1', u'ec2-34-201-158-159.compute-1.amazonaws.com', u'ec2-54-152-23-178.compute-1.amazonaws.com', u'localhost']
+ALLOWED_HOSTS = [u'127.0.0.1', u'ec2-34-201-158-159.compute-1.amazonaws.com', u'ec2-54-152-23-178.compute-1.amazonaws.com', u'localhost', u'192.168.1.142']
 
 
 LOGIN_REDIRECT_URL = '/'
@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
 ]
 
 MIDDLEWARE = [
@@ -131,5 +131,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
-#all the types of uploads allowed (in order): .mov, .flv, .mp4, .wmv, .avi 
+#all the types of uploads allowed (in order): .mov, .flv, .mp4, .wmv, .avi
 MEDIA_MIME_TYPES = ["video/quicktime", "video/x-flv", "video/mp4", "video/x-ms-wmv", "video/x-msvideo"]
