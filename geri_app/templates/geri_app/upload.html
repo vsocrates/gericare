@@ -4,11 +4,9 @@
 
 {% block content %}
 
-<p>Step 1. Take a video of yourself!</p>
-<p>Step 2. Upload the video below!</p>
-<p>{{benefactor.verification_code}}</p>
-        <!-- Upload form. Note enctype attribute! -->
-        <form action="{% url "upload" %}" method="post" enctype="multipart/form-data">
+<p>Step 1. Choose one below!</p>
+         <!-- Upload form. Note enctype attribute! -->
+       <form action="{% url "video_upload" %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <p>{{ form.non_field_errors }}</p>
 
@@ -26,11 +24,13 @@
             <br>
             <br>
 
-            <input type="file" name="video" accept="video/*;capture=camcorder">
+            <!-- <input type="file" name="video" accept="video/*;capture=camcorder"> -->
 
 
 
             <p><input type="submit" value="Upload"/></p>
 
         </form>
+
+      
 {% endblock %}

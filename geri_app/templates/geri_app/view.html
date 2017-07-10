@@ -7,15 +7,38 @@
 
   {% csrf_token %}
 
+    <link href="{% static "geri_app/css/video_playback.css" %}" rel="stylesheet">
+
+<!--   <a href="#" onclick="open_in_new_window('second_window', 'MySecondWindow', 'location=1,status=1,toolbar=1,scrollbars=1,resizeable=1,width=500,height=250');">Show Image</a>
+  <div id="second_window" data-new-window>
+      <img style="width: 100%; height: auto;" src="https://images.unsplash.com/photo-1496185106368-308ed96f204b" alt="Photo by Jad Limcaco - Unsplash.com" />
+  </div> -->
+
             <!-- List of uploaded documents -->
         {% if documents %}
             <ul>
                 {% for document in documents %}
+                <li>
+                asdfasdfasdf {{ media_url }}
+                    <a href="#" onclick="open_in_new_window('html_contents_{{ document.filename }}', 'Title', 'location=1,status=1,toolbar=1,scrollbars=1,resizeable=1,width=500,height=250');">{{ document.docfile.name }}</a><br>
+                      <div id="html_contents_{{ document.filename }}" class="data-new-window">
+                          <video id="test" controls style="width: 100%; height: auto;">
+                              <source src='http://127.0.0.1:8000{{ document.docfile.url }}' />
+
+                          </video>
+                      </div>
+                }
+                }
+                </li>
+
                     <li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li>
                 {% endfor %}
             </ul>
         {% else %}
             <p>No documents.</p>
         {% endif %}
+
+          <script src="{% static "geri_app/js/video_playback.js" %}"></script>
+
 
     {% endblock %}

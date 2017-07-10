@@ -1,6 +1,10 @@
 {% extends 'geri_app/base.html' %}
+{% load static %}
+
 
 {% block content %}
+  
+  <link href="{% static "geri_app/css/login.css" %}" rel="stylesheet">
 
 {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
@@ -15,25 +19,27 @@
     {% endif %}
 {% endif %}
 
-<form method="post" action="{% url 'login' %}">
-{% csrf_token %}
 
-<div>
-  <td>{{ form.username.label_tag }}</td>
-  <td>{{ form.username }}</td>
-</div>
-<div>
-  <td>{{ form.password.label_tag }}</td>
-  <td>{{ form.password }}</td>
+<div class="login-page">
+  <div class="form">
+    <form method="post" action="{% url 'login' %}" class="login-form">
+    {% csrf_token %}
+
+      <input autofocus id="id_username" placeholder="username" maxlength="254" name="username" type="text" required />
+      <input id="id_password" name="password" placeholder="password" type="password" required />
+      
+      <input type="hidden" name="next" value="" />
+
+      <button>login</button>
+      <!-- <input type="submit" value="login" /> -->
+
+      <br />
+      {# Assumes you setup the password_reset view in your URLconf #}
+      <p><a style="font-size:15px;" href="{% url 'password_reset' %}">Lost password?</a></p>
+
+    </form>
+  </div>
 </div>
 
-<div>
-  <input type="submit" value="login" />
-  <input type="hidden" name="next" value="" />
-</div>
-</form>
-
-{# Assumes you setup the password_reset view in your URLconf #}
-<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
 
 {% endblock %}
