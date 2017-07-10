@@ -3,3 +3,30 @@ body {
   padding-top: 50px;
   padding-bottom: 20px;
 }
+
+.intro {
+  background: repeating-linear-gradient(
+    -55deg,
+    #62D5D9,
+    #62D5D9 5px,
+    #67DEE3 5px,
+    #67DEE3 10px
+  );
+  height: 70vh;
+  width:100%;
+}
+
+.containIntro {
+  background-image: url('../assets/Curami_Final.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.intro > .container > h1 {
+  color: #F6114D;
+  border-width: 3px;
+  border-color: #F6114D;
+  border-radius: 3px;
+  border-style: solid;
+}

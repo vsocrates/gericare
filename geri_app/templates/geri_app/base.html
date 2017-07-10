@@ -30,28 +30,27 @@
   <body>
   {% block navbar %}
 <nav class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container-fluid">
+  <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
+        <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="{% url 'index' %}">Curami Logo</a>
+      <a class="navbar-brand" href="{% url 'index' %}">Curami</a>
     </div>
 
-    
+
 
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li><a href="{% url 'index' %}">Home</a></li>
     {% if request.user|has_group:"volunteer" %}
         <li><a href="{% url 'login' %}">Admin Login</a></li>
         <li><a href="{% url 'patient_upload' %}">Patient Upload</a></li>
         <li><a href="{% url 'pt_search' %}">Patient Search</a></li>
-      
+
     {% elif request.user|has_group:"benefactor"%}
-        <li><a href="{% url 'view' %}">View My Videos</a></li>  
+        <li><a href="{% url 'view' %}">View My Videos</a></li>
 
     {% else %}
         <li><a href="{% url 'pt_search' %}">Patient Search</a></li>
@@ -61,15 +60,15 @@
     {% if user.is_authenticated %}
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#">Welcome {{ request.user }}!</a></li>
-        <li><button type="button" class="btn btn-default navbar-btn" onclick="window.location.href='{% url 'logout' %}'" role="button">Logout</button></li>
+        <li><a href="{% url 'logout' %}" >Logout</a></li>
       </ul>
     {% else %}
      <ul class="nav navbar-nav navbar-right">
-        <li><button type="button" class="btn btn-default navbar-btn" onclick="window.location.href='{% url 'login' %}'" role="button">Login</button></li>
+        <li><a href="{% url 'login' %}" >Login</a></li>
     {% endif %}
     </div>
 
-    
+
 
   </div>
 </nav>
@@ -89,4 +88,3 @@
     <script src="{% static "geri_app/js/bootstrap.min.js" %}"></script>
     </body>
 </html>
-
