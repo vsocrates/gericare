@@ -36,11 +36,12 @@ def index(request):
 	return HttpResponse(template.render(context, request))
 
 def verify_benefactor(request):
+    request.session['form-submitted'] = True
     req_path = re.search('/verify/', request.build_absolute_uri(request.get_full_path()))
     form = MediaDocumentForm(request.POST, request.FILES)
 
     if request.method == "GET" and req_path:
-        template = loader.get_template('geri_app/upload.html')
+        template = loader.get_template('geri_app/patient_video.html')
         pt_code = request.GET['code']
         q = Benefactor.objects.filter(
             verification_code=pt_code
@@ -50,6 +51,7 @@ def verify_benefactor(request):
             context['benefactor'] = q[0]
             context['message'] = ''
             context['form'] = form
+            context['verification_code'] = pt_code
             return HttpResponse(template.render(context, request))
         else:
 
@@ -74,22 +76,30 @@ def verify_benefactor(request):
         # else:
         #     form2 = BenefactorVerificationForm()
 
-    
+
+def pt_video(request):
+    if not request.session.get('form-submitted', False):
+        request.session['form-submitted'] = False
+        return HttpResponseRedirect('/pt_find')
+
+    else:
+        request.session['form-submitted'] = False
+        return render(
+            request,
+            'geri_app/patient_video.html',
+            {'verification_code':request.GET['code']
+            }
+        )
+
 def simple_upload(request):
     # Handle file upload
-
-    try:
-        code = request.POST['code']
-        #print 'code',code
-        cur_benefactor = Benefactor.objects.get(verification_code=code)
-    except ObjectDoesNotExist:
-        print("That user doesn't exist.")
 
     #print "GET", request.POST
     if request.method == 'POST':
         form = MediaDocumentForm(request.POST, request.FILES)
         if form.is_valid():
-
+            code = request.POST['code']
+            cur_benefactor = Benefactor.objects.get(verification_code=code)
             newdoc = MediaDocument(docfile=request.FILES['docfile'], benefactor=cur_benefactor)
             newdoc.save()
 
@@ -98,15 +108,52 @@ def simple_upload(request):
             return HttpResponseRedirect('/')
     else:
         form = MediaDocumentForm()  # A empty, unbound form
+        try:
+            code = request.GET['code']
+            print 'code',code
+            cur_benefactor = Benefactor.objects.get(verification_code=code)
+        except ObjectDoesNotExist:
+            print("That user doesn't exist.")
 
-    return render(
-        request,
-        'geri_app/upload.html',
-        {'form': form,
-         'benefactor':cur_benefactor,
-         'message':''
-        }
-    )
+        return render(
+            request,
+            'geri_app/upload.html',
+            {'form': form,
+             'benefactor':cur_benefactor,
+             'message':''
+            }
+        )
+
+def webcam_upload(request):
+    print "help", request
+    if request.method == 'POST':
+        print "post request!", request.POST
+        code = request.POST['code']
+        cur_benefactor = Benefactor.objects.get(verification_code=code)
+        newdoc = MediaDocument(docfile=request.POST["file"], benefactor=cur_benefactor)
+        newdoc.save()
+
+        print "new document saved!"
+            # Redirect to the document list after POST
+        return HttpResponseRedirect('/')
+    
+    else:
+        form = MediaDocumentForm()  # A empty, unbound form
+        try:
+            code = request.GET['code']
+            #print 'code',code
+            cur_benefactor = Benefactor.objects.get(verification_code=code)
+        except ObjectDoesNotExist:
+            print("That user doesn't exist.")
+
+        return render(
+            request,
+            'geri_app/webcam_upload.html',
+            {'form': form,
+             'benefactor':cur_benefactor,
+             'message':''
+            }
+        )
 
 @group_required('benefactor')
 def view_videos(request):
@@ -125,7 +172,8 @@ def view_videos(request):
     return render(
         request,
         'geri_app/view.html',
-        {"documents": documents}
+        {"documents": documents,
+         "media_url": settings.MEDIA_URL}
     )
 
 @group_required('volunteer')
@@ -230,12 +278,25 @@ def pt_upload_success(request):
 
 @group_required('volunteer')
 def volunteer_landing(request):
+    hasNewVideoByPatient = {}
+
     q = Benefactor.objects.filter(
-            isCurrentPatient=False
+            isCurrentPatient=True
         )
+    for patient in q:
+        allVideosByPt = MediaDocument.objects.filter(
+                benefactor=patient,
+                hasBeenViewed=False
+            )
+        if allVideosByPt:
+            hasNewVideoByPatient[patient] = True
+        else:
+            hasNewVideoByPatient[patient] = False
+
     context = {}
     if q:
         context['active_patients'] = q
+        context['hasNewVideos'] = hasNewVideoByPatient
         template = loader.get_template('geri_app/volunteer_landing.html')
 
     return render(
@@ -319,3 +380,7 @@ def send_email(user, team_name, pwd, recipient, subject, text_body, html_body):
     except Exception as inst:
         print inst
         print "failed to send mail"
+
+
+
+

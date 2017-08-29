@@ -15,13 +15,14 @@ class VolunteerUploadFormPreview(FormPreview):
         pt_last = cleaned_data['pt_name_last']
         pt_room = cleaned_data['pt_room']
         pt_hospital = cleaned_data['pt_hospital']
-
+        relation = cleaned_data['family_relation']
 
         q1 = Benefactor.objects.filter(
             first_name=pt_first,
             last_name=pt_last,
             room_number=pt_room,
-            hospital_name=pt_hospital
+            hospital_name=pt_hospital,
+            relation=relation,
         )
 
         pt = None

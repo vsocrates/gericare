@@ -1,0 +1,32 @@
+{% extends 'geri_app/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <video id="gum" autoplay muted></video>
+<!--     <video id="recorded" autoplay loop></video>
+ -->
+    <div>
+      <button id="record" disabled>Start Recording</button>
+      <button id="play" disabled>Play</button>
+
+      <form action="{% url "webcam_upload" %}" method="post" enctype="multipart/form-data">
+      	{% csrf_token %}
+<!--             <p>
+                
+                <input id="id_docfile" name="docfile" type="file" required style="opacity:0; height:0px;width:0px;" />
+            </p>
+ -->
+            <input type="hidden" name="code" value="{{benefactor.verification_code}}">
+      </form>
+
+      <button id="upload" disabled onclick="upload('{{ benefactor.verification_code }}')">Upload</button>
+    </div>
+
+
+  <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+  <script src="{% static "geri_app/js/webcam.js" %}"></script>
+
+
+{% endblock %}
