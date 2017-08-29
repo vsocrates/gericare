@@ -3,19 +3,22 @@
 
 
 {% block content %}
-  
+
   <link href="{% static "geri_app/css/login.css" %}" rel="stylesheet">
 
 {% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
+<div style="text-align:center" class="alert alert-danger" role="alert">
+  <strong>Oh Snap!</strong>Your username and password didn't match. Please try again.
+</div>
 {% endif %}
 
 {% if next %}
     {% if user.is_authenticated %}
+    <div class="alert alert-danger" role="alert">
     <p>Your account doesn't have access to this page. To proceed,
     please login with an account that has access.</p>
+    </div>
     {% else %}
-    <p>Please login to see this page.</p>
     {% endif %}
 {% endif %}
 
@@ -27,7 +30,7 @@
 
       <input autofocus id="id_username" placeholder="username" maxlength="254" name="username" type="text" required />
       <input id="id_password" name="password" placeholder="password" type="password" required />
-      
+
       <input type="hidden" name="next" value="" />
 
       <button>login</button>
