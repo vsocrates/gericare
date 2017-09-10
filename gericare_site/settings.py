@@ -24,7 +24,7 @@ SECRET_KEY = 'y=hrx@lj2(te&$bd+sb=q(89cq#@7$wf&i^1q=u#8av@37v9hx'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [u'127.0.0.1', u'ec2-34-201-158-159.compute-1.amazonaws.com', u'ec2-54-152-23-178.compute-1.amazonaws.com', u'localhost', u'192.168.1.142']
+ALLOWED_HOSTS = [u'127.0.0.1', u'ec2-34-201-158-159.compute-1.amazonaws.com', u'ec2-54-152-23-178.compute-1.amazonaws.com', u'localhost', u'192.168.1.142', u'0.0.0.0']
 
 
 LOGIN_REDIRECT_URL = '/'

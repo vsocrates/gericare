@@ -4,17 +4,18 @@
 
 {% block content %}
   {% csrf_token %}
- 
-<h1>Patient Search</h1>
+<div class="ptFind-page">
+   <div class="defForm">
+    <h1>Patient Search</h1>
+    	<form action="/pt_find/" method="post">
+    	    {% csrf_token %}
 
-	<form action="/pt_find/" method="post">
-	    {% csrf_token %}
+    	    {{ form }}
 
-	    {{ form }}
-	    
-	    </br>
-	    </br>
-	    <input type="submit" value="Submit" />
-	</form>
-
+    	    </br>
+    	    </br>
+    	    <input type="submit" value="Submit" />
+    	</form>
+  </div>
+</div>
 {% endblock %}

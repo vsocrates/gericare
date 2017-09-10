@@ -4,20 +4,36 @@
 
 {% block content %}
   {% csrf_token %}
- 
+
  {% comment %}
 
- active_patients dict structure: 
+ active_patients dict structure:
 
  videos:  {1: {'data': <QuerySet [<MediaDocument: MediaDocument object>, <MediaDocument: MediaDocument object>, <MediaDocument: MediaDocument object>, <MediaDocument: MediaDocument object>, <MediaDocument: MediaDocument object>, <MediaDocument: MediaDocument object>, <MediaDocument: MediaDocument object>]>, 'pt_info': <Benefactor: Benefactor object>, 'has_video': True}, 2: {'data': <QuerySet []>, 'pt_info': <Benefactor: Benefactor object>, 'has_video': False}, 3: {'data': <QuerySet []>, 'pt_info': <Benefactor: Benefactor object>, 'has_video': False}, 4: {'data': <QuerySet []>, 'pt_info': <Benefactor: Benefactor object>, 'has_video': False}}
 
 
  {% endcomment %}
+<div class="container videoTable">
+ <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Hospital</th>
+        <th>Room Number</th>
+        <th>Has Video</th>
+      </tr>
+    </thead>
 
-<ul>
+<tbody>
 {% for id, pt in active_patients.items %}
-
-<li>{{pt.pt_info.first_name}} {{pt.pt_info.last_name}}, {{pt.pt_info.hospital_name}} {{pt.pt_info.room_number}} {{pt.has_video}}</li>
+<tr>
+<th>{{pt.pt_info.first_name}} {{pt.pt_info.last_name}}</th>
+<th> {{pt.pt_info.hospital_name}}</th>
+<th> {{pt.pt_info.room_number}}</th>
+<th> {{pt.has_video}}</th>
+</tr>
 {% endfor %}
-<ul>
+</tbody>
+</table>
+</div>
 {% endblock %}
