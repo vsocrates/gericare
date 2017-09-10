@@ -4,17 +4,20 @@
 
 {% block content %}
 
+  <link href="{% static "geri_app/css/main.css" %}" rel="stylesheet">
+
+
 <p>Step 1. Choose one below!</p>
          <!-- Upload form. Note enctype attribute! -->
        <form action="{% url "video_upload" %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
+
             <p>{{ form.non_field_errors }}</p>
 
-            <p>{{ form.docfile.label_tag }}</p>
+            <p><label for="id_docfile">Upload a Video!</label></p>
 
             <p>
-                {{ form.docfile.errors }}
-                {{ form.docfile }}
+                <input id="id_docfile" name="docfile" type="file" class="inputfile" required />
             </p>
 
             <input type="hidden" name="code" value="{{benefactor.verification_code}}">

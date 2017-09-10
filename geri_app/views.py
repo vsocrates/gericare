@@ -278,25 +278,30 @@ def pt_upload_success(request):
 
 @group_required('volunteer')
 def volunteer_landing(request):
-    hasNewVideoByPatient = {}
-
     q = Benefactor.objects.filter(
             isCurrentPatient=True
         )
+    allVideosByPt = {}
     for patient in q:
-        allVideosByPt = MediaDocument.objects.filter(
+        allVideosByPt[patient.id] = {}
+        print "patinet: ", patient.id
+        #allVideosByPt
+        allVideosByPt[patient.id]["pt_info"] = patient
+        pt_videos = MediaDocument.objects.filter(
                 benefactor=patient,
                 hasBeenViewed=False
             )
-        if allVideosByPt:
-            hasNewVideoByPatient[patient] = True
+        allVideosByPt[patient.id]['data'] = pt_videos
+        if pt_videos:
+            allVideosByPt[patient.id]['has_video'] = True
         else:
-            hasNewVideoByPatient[patient] = False
+            allVideosByPt[patient.id]['has_video'] = False
 
     context = {}
+
+    print "videos: ", allVideosByPt
     if q:
-        context['active_patients'] = q
-        context['hasNewVideos'] = hasNewVideoByPatient
+        context['active_patients'] = allVideosByPt
         template = loader.get_template('geri_app/volunteer_landing.html')
 
     return render(

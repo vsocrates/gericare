@@ -5,11 +5,19 @@
 {% block content %}
   {% csrf_token %}
  
+ {% comment %}
+
+ active_patients dict structure: 
+
+ videos:  {1: {'data': <QuerySet [<MediaDocument: MediaDocument object>, <MediaDocument: MediaDocument object>, <MediaDocument: MediaDocument object>, <MediaDocument: MediaDocument object>, <MediaDocument: MediaDocument object>, <MediaDocument: MediaDocument object>, <MediaDocument: MediaDocument object>]>, 'pt_info': <Benefactor: Benefactor object>, 'has_video': True}, 2: {'data': <QuerySet []>, 'pt_info': <Benefactor: Benefactor object>, 'has_video': False}, 3: {'data': <QuerySet []>, 'pt_info': <Benefactor: Benefactor object>, 'has_video': False}, 4: {'data': <QuerySet []>, 'pt_info': <Benefactor: Benefactor object>, 'has_video': False}}
+
+
+ {% endcomment %}
 
 <ul>
-{% for pt in active_patients %}
+{% for id, pt in active_patients.items %}
 
-<li>{{pt.first_name}} {{pt.last_name}}, {{pt.hospital_name}} {{pt.room_number}}</li>
+<li>{{pt.pt_info.first_name}} {{pt.pt_info.last_name}}, {{pt.pt_info.hospital_name}} {{pt.pt_info.room_number}} {{pt.has_video}}</li>
 {% endfor %}
 <ul>
 {% endblock %}
