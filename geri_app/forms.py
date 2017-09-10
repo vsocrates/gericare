@@ -8,6 +8,7 @@ class MediaDocumentForm(forms.Form):
 							   validators=[MimetypeValidator(settings.MEDIA_MIME_TYPES)],
 							   label='Upload a Video!',
 							   allow_empty_file=False)
+	uploader = forms.CharField(label="Your Name")
 
 class BenefactorVerificationForm(forms.Form):
 	verification = forms.CharField(label="To whom")

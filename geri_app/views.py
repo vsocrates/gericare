@@ -27,6 +27,7 @@ from decorators import group_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
 
+import json
 # Create your views here.
 
 def index(request):
@@ -98,9 +99,10 @@ def simple_upload(request):
     if request.method == 'POST':
         form = MediaDocumentForm(request.POST, request.FILES)
         if form.is_valid():
+            print "reuqest", request.POST
             code = request.POST['code']
             cur_benefactor = Benefactor.objects.get(verification_code=code)
-            newdoc = MediaDocument(docfile=request.FILES['docfile'], benefactor=cur_benefactor)
+            newdoc = MediaDocument(docfile=request.FILES['docfile'], benefactor=cur_benefactor, uploader=request.POST['uploader'])
             newdoc.save()
 
             #print "new document saved!"
@@ -175,6 +177,25 @@ def view_videos(request):
         {"documents": documents,
          "media_url": settings.MEDIA_URL}
     )
+
+def seen(request):
+    print ("seen request", request)
+    if request.method == 'POST':
+        print "post request!", request.POST
+
+        seenDoc = MediaDocument.objects.get(id=request.POST['id'])
+        seenDoc.hasBeenViewed = True
+        seenDoc.save()
+        
+        return HttpResponse(
+            json.dumps({"something to see": "this is happening"}),
+            content_type="application/json"
+        )
+    else:
+        return HttpResponse(
+            json.dumps({"nothing to see": "this isn't happening"}),
+            content_type="application/json"
+        )
 
 @group_required('volunteer')
 def pt_upload(request):
@@ -328,6 +349,7 @@ def pt_find(request):
             hospital_name=pt_hospital, 
         )
 
+    print "what is q: ", q
     if q:
         found_patient = q[0]
         context['fname'] = found_patient.first_name

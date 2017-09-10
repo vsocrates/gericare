@@ -19,19 +19,17 @@
             <ul>
                 {% for document in documents %}
                 <li>
-                asdfasdfasdf {{ media_url }}
-                    <a href="#" onclick="open_in_new_window('html_contents_{{ document.filename }}', 'Title', 'location=1,status=1,toolbar=1,scrollbars=1,resizeable=1,width=500,height=250');">{{ document.docfile.name }}</a><br>
+                    {{ document.uploaded_at }} by {{ document.uploader }}. Has it been seen?: {{ document.hasBeenViewed }}
+                    <a href="#" onclick="open_in_new_window('html_contents_{{ document.filename }}', 'Your Video', 'fullscreen=yes,autoplay=1', {{ document.id }});">{{ document.docfile.name }}</a><br>
                       <div id="html_contents_{{ document.filename }}" class="data-new-window">
                           <video id="test" controls style="width: 100%; height: auto;">
-                              <source src='http://127.0.0.1:8000{{ document.docfile.url }}' />
+                              <source src='http://127.0.0.1:8000{{ document.docfile.url }}' onended=/>
 
                           </video>
                       </div>
-                }
-                }
                 </li>
 
-                    <li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li>
+                    {# <li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li> #}
                 {% endfor %}
             </ul>
         {% else %}

@@ -37,7 +37,7 @@ class MediaDocument(models.Model):
 	benefactor = models.ForeignKey('Benefactor',on_delete=models.CASCADE, null=True)
 	uploaded_at = models.DateTimeField(default=now, editable=False)
 	hasBeenViewed = models.BooleanField(default=False)
-
+	uploader = models.CharField(max_length=40)
 	def filename(self):
 		return os.path.basename(self.docfile.name)
 
