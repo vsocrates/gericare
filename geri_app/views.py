@@ -15,6 +15,8 @@ from geri_app.forms import MediaDocumentForm
 from geri_app.forms import BenefactorVerificationForm
 from geri_app.forms import VolunteerUploadForm
 from geri_app.forms import PatientSearchForm
+from geri_app.forms import ContactForm 
+
 import re
 
 import smtplib
@@ -378,6 +380,15 @@ def pt_find(request):
     else:
         return HttpResponseRedirect('/patient_search')
 
+def about_us(request):
+    form_class = ContactForm
+    context = {}
+    context["form"] = form_class
+    return render(
+        request, 
+        'geri_app/aboutus.html',
+        context
+    )
 
 def send_email(user, team_name, pwd, recipient, subject, text_body, html_body):
     import smtplib

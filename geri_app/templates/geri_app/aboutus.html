@@ -1,0 +1,22 @@
+{% extends 'geri_app/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<h1>About Us</h1>
+
+<p>Send messages to loved ones when they need it the most. It’s difficult for all of us to find the time to visit family and friends when they are in the hospital. Curami allows you to not just send - but show - your support when your loved ones need it the most. Using Curami, you can send in personalized video messages to your loved ones at any time of the day from anywhere in the world.</p>
+
+<hr>
+
+<h2>Contact Us!</h2>
+<br>
+<form role="form" action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>
+
+
+{% endblock %}
