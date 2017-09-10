@@ -7,9 +7,14 @@
  
 <h1>Patient Search</h1>
 
-<h2>Is this your loved one?</h2>
+	<form action="/pt_find/" method="post">
+	    {% csrf_token %}
 
-
-<h4>{{fname}} {{lname}} at Room {{room}} in {{hospital}}</h4>
+	    {{ form }}
+	    
+	    </br>
+	    </br>
+	    <input type="submit" value="Submit" />
+	</form>
 
 {% endblock %}

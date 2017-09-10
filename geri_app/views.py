@@ -14,6 +14,7 @@ from geri_app.models import Benefactor
 from geri_app.forms import MediaDocumentForm
 from geri_app.forms import BenefactorVerificationForm
 from geri_app.forms import VolunteerUploadForm
+from geri_app.forms import PatientSearchForm
 import re
 
 import smtplib
@@ -186,7 +187,7 @@ def seen(request):
         seenDoc = MediaDocument.objects.get(id=request.POST['id'])
         seenDoc.hasBeenViewed = True
         seenDoc.save()
-        
+
         return HttpResponse(
             json.dumps({"something to see": "this is happening"}),
             content_type="application/json"
@@ -331,13 +332,23 @@ def volunteer_landing(request):
         context
     )
 
+def patient_search(request):
+    form = PatientSearchForm(request.POST)
+    context = {}
+    context["form"] = form
+    return render(
+        request, 
+        'geri_app/pt_find.html',
+        context
+    )
+
 def pt_find(request):
 
     try:
-        fname = request.GET['pt_fname']
-        lname = request.GET['pt_lname']
-        pt_room = request.GET['pt_room']
-        pt_hospital = request.GET['pt_hospital']
+        fname = request.POST['pt_fname']
+        lname = request.POST['pt_lname']
+        pt_room = request.POST['pt_room']
+        pt_hospital = request.POST['pt_hospital']
     except MultiValueDictKeyError:
         return HttpResponseRedirect('/patient_search')
 
