@@ -2,34 +2,53 @@
 {% load i18n %}
 
 {% block content %}
+<div class="container">
+<div class="row-sm-12">
+  <div class="col-sm-6">
 
-<h1>{% trans "Preview your submission" %}</h1>
+    <h1>{% trans "Edit Again"%}</h1>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <form action="" method="post">{% csrf_token %}
+          <div class="form-group">
+            <table class="table">
+              {{ form }}
+            </table>
+          </div>
+          <div class="form-group">
+            <input type="hidden" name="{{ stage_field }}" value="1" />
+            <input class="btn btn-danger btn-block" type="submit" value="{% trans "Preview" %}" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
-<table>
-{% for field in form %}
-<tr>
-<th>{{ field.label }}:</th>
-<td>{{ field.data }}</td>
-</tr>
-{% endfor %}
-</table>
 
-<form action="" method="post">{% csrf_token %}
-{% for field in form %}{{ field.as_hidden }}
-{% endfor %}
-<input type="hidden" name="{{ stage_field }}" value="2" />
-<input type="hidden" name="{{ hash_field }}" value="{{ hash_value }}" />
-<p><input type="submit" value="{% trans "Submit" %}" /></p>
-</form>
 
-<h1>{% trans "Or edit it again" %}</h1>
+  <div class="col-sm-6">
+    <h1>{% trans "Preview" %}</h1>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        {% for field in form %}
+        <div class="form-group">
+          <label class="col-sm-6 control-label">{{ field.label }}:</label>
+          <div class="col-sm-6">
+            <p>{{ field.data }}</p>
+          </div>
+        </div>
+        {% endfor %}
 
-<form action="" method="post">{% csrf_token %}
-<table>
-{{ form }}
-</table>
-<input type="hidden" name="{{ stage_field }}" value="1" />
-<p><input type="submit" value="{% trans "Preview" %}" /></p>
-</form>
-
+        <form action="" method="post">{% csrf_token %}
+        {% for field in form %}{{ field.as_hidden }}
+        {% endfor %}
+        <input type="hidden" name="{{ stage_field }}" value="2" />
+        <input type="hidden" name="{{ hash_field }}" value="{{ hash_value }}" />
+        <input class="btn btn-success btn-block" type="submit" value="{% trans "Submit" %}" />
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
 {% endblock %}

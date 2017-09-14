@@ -15,7 +15,7 @@ from geri_app.forms import MediaDocumentForm
 from geri_app.forms import BenefactorVerificationForm
 from geri_app.forms import VolunteerUploadForm
 from geri_app.forms import PatientSearchForm
-from geri_app.forms import ContactForm 
+from geri_app.forms import ContactForm
 
 import re
 
@@ -35,7 +35,7 @@ import datetime
 # Create your views here.
 
 def index(request):
-	
+
 	template = loader.get_template('geri_app/index.html')
 	context = {}
 	return HttpResponse(template.render(context, request))
@@ -61,7 +61,7 @@ def verify_benefactor(request):
         else:
 
             return render(
-                request, 
+                request,
                 'geri_app/index.html',
                 {'message':'Sorry, that is not a valid code!'}
             )
@@ -71,7 +71,7 @@ def verify_benefactor(request):
         #     q1 = Benefactor.objects.filter(
         #         verification_code = request.GET.values()[0]
         #         )
-            
+
         #     if q1:
         #         benefactor = q1.values()[0]
         #         context['benefactor'] = benefactor
@@ -142,7 +142,7 @@ def webcam_upload(request):
         #print "new document saved!"
             # Redirect to the document list after POST
         return HttpResponseRedirect('/')
-    
+
     else:
         form = MediaDocumentForm()  # A empty, unbound form
         try:
@@ -195,7 +195,7 @@ def seen(request):
 
 def removept(request):
     if request.method == 'POST':
-        
+
         print "these are the post items: ", request
         checkedOutPt = Benefactor.objects.get(id=request.POST['id'])
         checkedOutPt.isCurrentPatient = False
@@ -206,7 +206,7 @@ def removept(request):
     # patientCheckedOutDate = models.DateField(blank=True, null=True)
     #template = loader.get_template('geri_app/volunteer_landing.html')
     return HttpResponseRedirect('/volunteer')
-    
+
 
 @group_required('volunteer')
 def pt_upload(request):
@@ -220,9 +220,9 @@ def pt_upload(request):
 #         form = VolunteerUploadForm(request.GET)
 #         context = {}
 #         if form.is_valid():
-#             pt_first = request.GET['pt_name_first'] 
-#             pt_last = request.GET['pt_name_last'] 
-#             family_name = request.GET['family_member_name'] 
+#             pt_first = request.GET['pt_name_first']
+#             pt_last = request.GET['pt_name_last']
+#             family_name = request.GET['family_member_name']
 #             family_email = request.GET['family_email']
 #             relation = request.GET['family_relation']
 #             pt_room = request.GET['pt_room']
@@ -235,7 +235,7 @@ def pt_upload(request):
 #                        'pt_room':pt_room,
 #                        'pt_hospital': pt_hospital,
 #                       }
-                        
+
 #             if not q1:
 #                 new_uuid = uuid.uuid4()
 #                 new_pt = Benefactor(
@@ -250,15 +250,15 @@ def pt_upload(request):
 
 #             return HttpResponse(template2.render(context, request))
 #         else:
-#             form = VolunteerUploadForm()     
+#             form = VolunteerUploadForm()
 
 #     return render(
-#         request, 
+#         request,
 #         'geri_app/pt_upload.html',
 #         {'form': form}
 #     )
 
-#TODO Make the email upload async so it's faster? 
+#TODO Make the email upload async so it's faster?
 @group_required('volunteer')
 def pt_upload_success(request):
     email = request.GET['email']
@@ -303,7 +303,7 @@ def pt_upload_success(request):
 
 
     return render(
-        request, 
+        request,
         'geri_app/patient_upload_success.html',
         context,
     )
@@ -338,7 +338,7 @@ def volunteer_landing(request):
         template = loader.get_template('geri_app/volunteer_landing.html')
 
     return render(
-        request, 
+        request,
         'geri_app/volunteer_landing.html',
         context
     )
@@ -348,7 +348,7 @@ def patient_search(request):
     context = {}
     context["form"] = form
     return render(
-        request, 
+        request,
         'geri_app/pt_find.html',
         context
     )
@@ -368,7 +368,7 @@ def pt_find(request):
             first_name=fname,
             last_name=lname,
             room_number=pt_room,
-            hospital_name=pt_hospital, 
+            hospital_name=pt_hospital,
         )
 
     #print "what is q: ", q
@@ -382,7 +382,7 @@ def pt_find(request):
         return HttpResponseRedirect('/verify/?code='+str(found_patient.verification_code))
 
     #     return render(
-    #     request, 
+    #     request,
     #     'geri_app/pt_find.html',
     #     context
     # )
@@ -394,7 +394,7 @@ def about_us(request):
     context = {}
     context["form"] = form_class
     return render(
-        request, 
+        request,
         'geri_app/aboutus.html',
         context
     )
@@ -403,7 +403,7 @@ def send_email(user, team_name, pwd, recipient, subject, text_body, html_body):
     import smtplib
     from email.mime.multipart import MIMEMultipart
     from email.mime.text import MIMEText
-    
+
     msg = MIMEMultipart('alternative')
     msg['Subject'] = subject
     msg['From'] = team_name + "<"+user+">"
@@ -420,7 +420,7 @@ def send_email(user, team_name, pwd, recipient, subject, text_body, html_body):
 
     gmail_user = user
     gmail_pwd = pwd
-    
+
     # TO = recipient if type(recipient) is list else [recipient]
     # SUBJECT = subject
     # TEXT = body
@@ -438,7 +438,3 @@ def send_email(user, team_name, pwd, recipient, subject, text_body, html_body):
     except Exception as inst:
         #print inst
         print "failed to send mail"
-
-
-
-
