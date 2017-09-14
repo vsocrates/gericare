@@ -45,8 +45,8 @@
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
     {% if request.user|has_group:"volunteer" %}
-        <li><a href="{% url 'volunteer' %}">New Videos</a></li>
-        <li><a href="{% url 'patient_upload' %}">Patient Upload</a></li>
+        <li><a href="{% url 'volunteer' %}">Patient Summary</a></li>
+        <li><a href="{% url 'patient_upload' %}">New Patient Upload</a></li>
 
     {% elif request.user|has_group:"benefactor"%}
         <li><a href="{% url 'view' %}">View My Videos</a></li>

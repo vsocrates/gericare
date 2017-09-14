@@ -31,6 +31,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
 
 import json
+import datetime
 # Create your views here.
 
 def index(request):
@@ -115,7 +116,7 @@ def simple_upload(request):
         form = MediaDocumentForm()  # A empty, unbound form
         try:
             code = request.GET['code']
-            print 'code',code
+            #print 'code',code
             cur_benefactor = Benefactor.objects.get(verification_code=code)
         except ObjectDoesNotExist:
             print("That user doesn't exist.")
@@ -130,15 +131,15 @@ def simple_upload(request):
         )
 
 def webcam_upload(request):
-    print "help", request
+    #print "help", request
     if request.method == 'POST':
-        print "post request!", request.POST
+        #print "post request!", request.POST
         code = request.POST['code']
         cur_benefactor = Benefactor.objects.get(verification_code=code)
         newdoc = MediaDocument(docfile=request.POST["file"], benefactor=cur_benefactor)
         newdoc.save()
 
-        print "new document saved!"
+        #print "new document saved!"
             # Redirect to the document list after POST
         return HttpResponseRedirect('/')
     
@@ -190,15 +191,22 @@ def seen(request):
         seenDoc.hasBeenViewed = True
         seenDoc.save()
 
-        return HttpResponse(
-            json.dumps({"something to see": "this is happening"}),
-            content_type="application/json"
-        )
-    else:
-        return HttpResponse(
-            json.dumps({"nothing to see": "this isn't happening"}),
-            content_type="application/json"
-        )
+    return HttpResponseRedirect('/view')
+
+def removept(request):
+    if request.method == 'POST':
+        
+        print "these are the post items: ", request
+        checkedOutPt = Benefactor.objects.get(id=request.POST['id'])
+        checkedOutPt.isCurrentPatient = False
+        checkedOutPt.patientCheckedOutDate = datetime.date.today()
+
+        checkedOutPt.save()
+    #         isCurrentPatient = models.BooleanField(default=True)
+    # patientCheckedOutDate = models.DateField(blank=True, null=True)
+    #template = loader.get_template('geri_app/volunteer_landing.html')
+    return HttpResponseRedirect('/volunteer')
+    
 
 @group_required('volunteer')
 def pt_upload(request):
@@ -273,8 +281,8 @@ def pt_upload_success(request):
     email_body_text = "Dear" + name + ",\nWelcome to Curami! Thank you for taking the first step toward your Curami experience. Using Curami, you can send personalized video messages to your loved ones in the hospital at any time of the day from anywhere in the world. \nClick on this link to share your love with "+ full_name +" by sending them a video. \n Know any other family or friends who would like to share their love and send a message to " + full_name +"? Send them this link to upload a video: "+ upload_link + ". \nIf you have any questions, please reach out to the Curami Team at TeamCurami@gmail.com. \nBest wishes,\n The Curami Team"
 
     email_link_href = r'<a href="' + upload_link + '">' + upload_link + "</a>"
-    print 'upload_link' , upload_link
-    print email_link_href
+    #print 'upload_link' , upload_link
+    #print email_link_href
     email_body_html = """
         <html>
           <head></head>
@@ -305,10 +313,11 @@ def volunteer_landing(request):
     q = Benefactor.objects.filter(
             isCurrentPatient=True
         )
+    #print "in voluntter landing; ", q
     allVideosByPt = {}
     for patient in q:
         allVideosByPt[patient.id] = {}
-        print "patinet: ", patient.id
+        #print "patinet: ", patient.id
         #allVideosByPt
         allVideosByPt[patient.id]["pt_info"] = patient
         pt_videos = MediaDocument.objects.filter(
@@ -323,7 +332,7 @@ def volunteer_landing(request):
 
     context = {}
 
-    print "videos: ", allVideosByPt
+    #print "videos: ", allVideosByPt
     if q:
         context['active_patients'] = allVideosByPt
         template = loader.get_template('geri_app/volunteer_landing.html')
@@ -362,7 +371,7 @@ def pt_find(request):
             hospital_name=pt_hospital, 
         )
 
-    print "what is q: ", q
+    #print "what is q: ", q
     if q:
         found_patient = q[0]
         context['fname'] = found_patient.first_name
@@ -427,7 +436,7 @@ def send_email(user, team_name, pwd, recipient, subject, text_body, html_body):
         server.quit()
         print 'successfully sent the mail'
     except Exception as inst:
-        print inst
+        #print inst
         print "failed to send mail"
 
 

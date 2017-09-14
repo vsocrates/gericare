@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^webcam_upload/', views.webcam_upload, name = 'webcam_upload'),
     url(r'^volunteer/', views.volunteer_landing, name="volunteer"),
     url(r'^seenvideo/', views.seen, name="seen"),
+    url(r'^removept/', views.removept, name="removept"),
     url(r'^aboutus/', views.about_us, name="aboutus"),
     url(r'^$', views.index, name='index'),
 

@@ -32,6 +32,12 @@ class Benefactor(models.Model):
 	)
 	relation = models.CharField(max_length=30, choices=RELATION, default="friend")
 
+	def __str__(self):
+		return "Benefactor name = %s %s, room = %s, isCurrentPatient = %s" % (self.first_name, self.last_name, self.room_number, self.isCurrentPatient)
+
+	def __unicode__(self):
+		return "Benefactor name = %s %s, room = %s, isCurrentPatient = %s" % (self.first_name, self.last_name, self.room_number, self.isCurrentPatient)
+
 class MediaDocument(models.Model):
 	docfile = models.FileField(upload_to="documents/%Y/%m/%d")
 	benefactor = models.ForeignKey('Benefactor',on_delete=models.CASCADE, null=True)

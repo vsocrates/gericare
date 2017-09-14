@@ -22,11 +22,11 @@ class VolunteerUploadFormPreview(FormPreview):
             last_name=pt_last,
             room_number=pt_room,
             hospital_name=pt_hospital,
-            relation=relation,
+            isCurrentPatient=False,
         )
-
         pt = None
 
+        print "print q1 everytim", q1
         #TODO something i forgot, it has to do with the query below....
         
         if not q1:
@@ -45,13 +45,38 @@ class VolunteerUploadFormPreview(FormPreview):
 	            room_number=pt_room,
 	            hospital_name=pt_hospital,
 	            verification_code=str(new_uuid),
-                user=user
+                user=user,
+                relation=relation
 	            )
             new_pt.save()
             pt = new_pt
 
         else:
-        	pt = q1[0]
+            print "we found this pt: ", q1[0]
+
+            #remove old user from Django auth model (username must be unique)
+            username = pt_first+pt_last+str(pt_room)
+            user = User.objects.get(
+                username=username
+            )
+
+            "there is a user: ", user
+            user.delete()
+           
+            #create a new one
+            user = User.objects.create_user(pt_first+pt_last+str(pt_room), '', str(pt_hospital)+'geriatrics')
+            user.first_name = pt_first
+            user.last_name = pt_last
+            new_group, created = Group.objects.get_or_create(name='benefactor')
+            user.groups.add(new_group)
+            user.save()
+
+            
+            pt = q1[0]
+
+            #make the patient live again:
+            pt.isCurrentPatient = True
+            pt.save()
 
         return HttpResponseRedirect('/pt_upload_success?email='+cleaned_data['family_email']
         	+"&name="+cleaned_data['family_member_name']

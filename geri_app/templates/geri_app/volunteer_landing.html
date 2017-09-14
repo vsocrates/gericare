@@ -21,6 +21,7 @@
         <th>Hospital</th>
         <th>Room Number</th>
         <th>Has Video</th>
+        <th>Remove Patient?</th>
       </tr>
     </thead>
 
@@ -28,12 +29,27 @@
 {% for id, pt in active_patients.items %}
 <tr>
 <th>{{pt.pt_info.first_name}} {{pt.pt_info.last_name}}</th>
-<th> {{pt.pt_info.hospital_name}}</th>
-<th> {{pt.pt_info.room_number}}</th>
-<th> {{pt.has_video}}</th>
+<th>{{pt.pt_info.hospital_name}}</th>
+<th>{{pt.pt_info.room_number}}</th>
+<th>{{pt.has_video}}</th>
+<th align="center">
+	<svg  weight="24" height="24" viewBox="0 0 217 217" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" onclick="remove_patient({{ pt.pt_info.id }})">
+	    <defs></defs>
+	    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="square">
+	        <g id="Group" transform="translate(22.000000, 22.000000)" stroke="#F6114D" stroke-width="31">
+	            <path d="M0.5,0.5 L172.511628,172.511628" id="Line"></path>
+	            <path d="M0.5,0.5 L172.511628,172.511628" id="Line" transform="translate(86.500000, 86.500000) scale(1, -1) translate(-86.500000, -86.500000) "></path>
+	        </g>
+	    </g>
+	</svg>
+		{# <object data="{% static "geri_app/assets/remove.svg" %}" width="20" height="20" type="image/svg+xml" class="removeicon" onclick="remove_patient({{ pt.pt_info.id }})"></object> #}
+</th>
 </tr>
 {% endfor %}
 </tbody>
 </table>
 </div>
+
+<script src="{% static "geri_app/js/video_playback.js" %}"></script>
+<script src="{% static "geri_app/js/remove_patient.js" %}"></script>
 {% endblock %}
