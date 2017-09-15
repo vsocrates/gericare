@@ -3,11 +3,25 @@
 {% load static %}
 
 {% block content %}
-
-<p>Step 1. Choose one below!</p>
-
-	
-   <a href="{% url 'video_upload' %}?code={{ verification_code }}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Upload a Video</a>
+<div style="margin-top:3%;" class="container">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-sm-8" style="border-right: 1px solid #ccc;">
+					<div class="page-header">
+						<h1>Upload a Video!</h1>
+					</div>
+					<p>
+						lots of text.lots of text.lots of text.lots of text.lots of text.lots of text.lots of text.lots of text.lots of text.lots of text.lots of text.lots of text.lots of text.lots of text.lots of text.lots of text.lots of text.lots of text.lots of text.lots of text.lots of text.lots of text.lots of text.lots of text.lots of text.
+					</p>
+				</div>
+				<div class="col-sm-4">
+					<span class="align-middle"><a href="{% url 'video_upload' %}?code={{ verification_code }}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Upload a Video</a></span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 <!--    <a href="{% url 'webcam_upload' %}?code={{ verification_code }}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Take a Video</a>
  -->
 {% endblock %}
