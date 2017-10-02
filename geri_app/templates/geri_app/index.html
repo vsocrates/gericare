@@ -29,18 +29,23 @@ alert(' {{message}} ');
     </section>
 
     <div class="container">
-    <h3>Three Easy Steps!</h3>
+      <h3>Three Easy Steps!</h3>
       <!-- Example row of columns -->
       <div class="row">
         <div class="col-md-4">
           <h2>Get a code!</h2>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+          {% load static %}
+          <img src="{% static "geri_app/assets/Designer.svg" %}"/>
         </div>
         <div class="col-md-4">
           <h2>Make a video!</h2>
-       </div>
+          {% load static %}
+          <img src="{% static "geri_app/assets/VR.svg" %}"/>
+        </div>
         <div class="col-md-4">
-          <h2>Share you thoughts!</h2>
+          <h2>Share your thoughts!</h2>
+          {% load static %}
+          <img src="{% static "geri_app/assets/Millenial.svg" %}"/>
         </div>
       </div>
 
